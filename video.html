@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Video</title>
+    <style>
+        .player {
+            display: table;
+            margin: 0 auto;
+        }
+
+        .controls {
+            text-align: center;
+        }
+
+        .controls button {
+            padding: 5px;
+            font-size: 18px;
+            text-align: center;
+            border-radius: 15px;
+            width: 20%;
+            display: inline-block;
+        }
+
+    </style>
+</head>
+
+<body>
+<div class="player">
+    <div class="container">
+        <video id="myVideo">
+            <source src="http://tecfa.unige.ch/guides/html/html5-video/videos/state-of-wikipedia-480x272.mp4">
+            <source src="http://tecfa.unige.ch/guides/html/html5-video/videos/state-of-wikipedia-480x272.webm">
+        </video>
+    </div>
+
+    <div class="controls">
+        <button id="playBtn"
+                onclick="this.textContent === 'Play' ? play() : pause();">Play</button>
+
+        <button id="stopBtn"
+                onclick="stop()">Stop</button>
+
+        <input id="volumeSlider"
+               onchange="volumeUpdate()"
+               type="range"
+               min="0"
+               max="100"
+               step="1">
+    </div>
+</div>
+
+
+
+<script>
+    let video = document.getElementById("myVideo");
+    let playBtn = document.getElementById("playBtn");
+    let volumeSlider = document.getElementById("volumeSlider");
+    let answerIsTrue = false;
+
+
+    function play()
+    {
+        video.play();
+        playBtn.textContent = "Pause"
+    }
+
+
+    function pause()
+    {
+        video.pause();
+        playBtn.textContent = "Play"
+    }
+
+
+    function stop()
+    {
+        video.pause();
+        video.currentTime = 0;
+    }
+
+
+    function restart()
+    {
+        stop();
+        play();
+    }
+
+
+    function volumeUpdate()
+    {
+        video.volume = volumeSlider.value / 100;
+    }
+
+
+    video.ontimeupdate = function () {
+        if (!answerIsTrue && Math.floor(video.currentTime) === 10)
+        {
+            pause();
+            answerIsTrue = prompt("De quoi parle-t-on dans cette video?").toLowerCase() === "wikipedia";
+            answerIsTrue ? play() : restart();
+        }
+    }
+</script>
+
+</body>
+</html>
